@@ -1,0 +1,20 @@
+@use "../../../../assets/sass/" as *;
+.listline {
+  max-width: 100%;
+  min-height: 800px;
+  background: $main-bg;
+  filter: drop-shadow(0px 4px 4px rgba(131, 130, 130, 0.25));
+  border-radius: 4px;
+  &__layout {
+    margin-left: 20px;
+    padding-top: 20px;
+    &__title {
+      margin-top: 20px;
+      width: 200px;
+      width: 200px;
+    }
+    &__content {
+      margin-top: 20px;
+    }
+  }
+}

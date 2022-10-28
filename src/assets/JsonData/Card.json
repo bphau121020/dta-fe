@@ -1,0 +1,26 @@
+[
+  {
+    "icon": "bx bx-notepad",
+    "title": "Total Reviews",
+    "value": "3799",
+    "count": "Update (24 hours ago)"
+  },
+  {
+    "icon": "bx bx-message-error",
+    "title": "Total Invalids",
+    "value": "50",
+    "count": "Update (24 hours ago)"
+  },
+  {
+    "icon": "bx bx-location-plus",
+    "title": "Total Place",
+    "value": "5",
+    "count": "Update (24 hours ago)"
+  },
+  {
+    "icon": "bx bxs-bar-chart-alt-2",
+    "title": "Best Review Star",
+    "value": "20",
+    "count": "Update (24 hours ago)"
+  }
+]

@@ -1,0 +1,21 @@
+@use "../../../../assets/sass/" as *;
+.listcolumn {
+  max-width: 100%;
+  background: $main-bg;
+  filter: drop-shadow(0px 4px 4px rgba(131, 130, 130, 0.25));
+  border-radius: 4px;
+  &__layout {
+    margin-left: 20px;
+    padding-top: 20px;
+    &__title {
+      @include flex(center, flex-start);
+      padding-top: 20px;
+      .select-place {
+        margin-left: 20px;
+      }
+    }
+    &__content {
+      margin-top: 20px;
+    }
+  }
+}
