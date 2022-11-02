@@ -1,0 +1,13 @@
+.navbar {
+  @include flex(center, space-between);
+  color: $txt-main-color;
+  padding: 14px 20px;
+  &__right {
+    @include flex(center, space-between);
+
+    span {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  }
+}
