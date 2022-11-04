@@ -1,18 +1,18 @@
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import UserAvatar from '../../../assets/images/avatar.png';
+import { AuthContext } from "../../../context/AuthContext";
 import { logout as logoutFireBase } from "../../../firebase/service";
 import { logout } from "../../../redux/user/userSlice";
-import UserAvatar from '../../../assets/images/avatar.png';
 
 const Navbar = () => {
   let time = new Date().toLocaleTimeString();
+  const dispatch = useDispatch();
   const [ctime, setCtime] = useState(time);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
   const UpdateTime = () => {
     time = new Date().toLocaleTimeString();
     setCtime(time);
@@ -28,17 +28,15 @@ const Navbar = () => {
     logoutFireBase();
     dispatch(logout());
   };
-  const dispatch = useDispatch();
+  const user = useContext(AuthContext).user;
   return (
     <nav className="container">
       <div className="navbar">
         <div >
           <h1 className="navbar__left__title">Have A Nice Day!</h1>
-          <p>Hello everyone, Welcome</p>
+          <p>Hello {user.firstName}, Welcome</p>
         </div>
-
         <h1>{ctime}</h1>
-
         <div className="navbar__right">
           <div onClick={handleMenu} className="header__menu__item__icon">
             <Avatar alt="User" size="35" round="true" src={UserAvatar} />
@@ -58,9 +56,7 @@ const Navbar = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-
             <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-
           </Menu>
         </div>
       </div>

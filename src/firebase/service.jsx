@@ -4,7 +4,7 @@ import {
 import {
   addDoc, collection, deleteDoc, doc, getDocs, query, setDoc, where
 } from "firebase/firestore";
-import { auth, db } from "./config";
+import { auth, fireStore } from "./config";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -20,7 +20,7 @@ const registerWithEmailAndPassword = async (email, name, firstName, lastName, pa
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, "users"), {
+    await addDoc(collection(fireStore, "users"), {
       uid: user.uid,
       email: user.email,
       displayName: name,
@@ -48,13 +48,17 @@ const sendPasswordReset = async (email) => {
 };
 
 const logout = () => {
-  signOut(auth);
+  signOut(auth).then(() => {
+    // Sign-out successful.
+  }).catch((error) => {
+    alert("Oops! Something went wrong. Please try again.")
+  });
 };
 
 const getCart = async (userId) => {
   try {
     const q = query(
-      collection(db, "carts"),
+      collection(fireStore, "carts"),
       where("uid", "==", userId),
       where("status", "==", "active")
     );
@@ -68,7 +72,7 @@ const getCart = async (userId) => {
         status: "active",
         products: [],
       };
-      await addDoc(collection(db, "carts"), emptyCart);
+      await addDoc(collection(fireStore, "carts"), emptyCart);
       return emptyCart;
     }
   } catch (err) {
@@ -79,7 +83,7 @@ const getCart = async (userId) => {
 const updateCart = async (userId, cart) => {
   try {
     const q = query(
-      collection(db, "carts"),
+      collection(fireStore, "carts"),
       where("uid", "==", userId),
       where("status", "==", "active")
     );
@@ -87,7 +91,7 @@ const updateCart = async (userId, cart) => {
 
     const documentId = docs.docs.at(0).id;
 
-    await setDoc(doc(collection(db, "carts"), documentId), cart);
+    await setDoc(doc(collection(fireStore, "carts"), documentId), cart);
   } catch (err) {
     alert(err.message);
   }
@@ -96,7 +100,7 @@ const updateCart = async (userId, cart) => {
 const checkoutCart = async (userId, cart, address, payment) => {
   try {
     const q = query(
-      collection(db, "carts"),
+      collection(fireStore, "carts"),
       where("uid", "==", userId),
       where("status", "==", "active")
     );
@@ -105,21 +109,21 @@ const checkoutCart = async (userId, cart, address, payment) => {
     const documentId = docs.docs.at(0).id;
     const cartData = docs.docs.at(0).data();
 
-    await deleteDoc(doc(collection(db, "carts"), documentId), cart);
+    await deleteDoc(doc(collection(fireStore, "carts"), documentId), cart);
     const order = {
       uid: userId,
       ...cartData,
       address,
       payment,
     };
-    await setDoc(doc(collection(db, "orders"), documentId), order);
+    await setDoc(doc(collection(fireStore, "orders"), documentId), order);
   } catch (err) {
     alert(err.message);
   }
 };
 
 async function getDocID(user) {
-  const querySnapshot = await getDocs(collection(db, "users"));
+  const querySnapshot = await getDocs(collection(fireStore, "users"));
   let documentsID;
   querySnapshot.forEach((doc) => {
     if (doc.data().uid === user.uid) {
@@ -131,8 +135,8 @@ async function getDocID(user) {
 }
 
 async function getDocData(user) {
-  
-  const querySnapshot = await getDocs(collection(db, "users"));
+
+  const querySnapshot = await getDocs(collection(fireStore, "users"));
   let data;
   querySnapshot.forEach((doc) => {
     if (doc.data().uid === user.uid) {
@@ -157,7 +161,7 @@ const pushToast = (toast, title, description, status) => {
 export {
   googleProvider,
   auth,
-  db,
+  fireStore,
   getCart,
   checkoutCart,
   updateCart,
