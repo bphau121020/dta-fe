@@ -1,30 +1,22 @@
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { userSelector } from '../redux/selectors';
 import { useNavigate } from "react-router-dom";
+import { spinnerStyle } from '../constant';
 import { auth } from "../firebase/config";
-const spinnerStyle = {
-  display: "grid",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  witdth: "100vh",
-};
+import { getDocData } from '../firebase/service';
+
 export const AuthContext = React.createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const localUser = useSelector(userSelector);
-
   useEffect(() => {
-    const unsubscribed = auth.onAuthStateChanged(function (user) {
+    const unsubscribed = auth.onAuthStateChanged(async function (user) {
       if (user) {
-        const { uid, firstName, lastName } =
-          user;
-        setUser({ uid, firstName, lastName });
+        const { uid } = user;
+        const data = await getDocData(user);
+        setUser({ uid, firstName: data.firstName, lastName: data.lastName });
         navigate("/dashboard");
       }
       else {

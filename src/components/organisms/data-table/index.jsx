@@ -10,11 +10,11 @@ const columns = [
     { field: 'comment', headerName: 'comment', minidth: 480, headerAlign: 'center', renderCell: (params) => <ExpandableCell {...params} />, flex: 1 },
 ];
 
-const rows = mockData;
+export const DataTable = (props) => {
+    const { rows } = props;
 
-export const DataTable = () => {
     return (
-        <div style={{ height: 650, width: '100%' }}>
+        rows && <div style={{ height: 650, width: '100%' }}>
             <DataGrid
                 rows={rows}
                 columns={columns}
